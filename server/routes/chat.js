@@ -91,7 +91,7 @@ router.post('/message', async (req, res) => {
 
         // 4. Prepare System Prompt
         const chatInstincts = getInstincts().join('\n- ');
-        const systemPrompt = `You are AIra. Analyze context precisely.`;
+        const systemPrompt = `You are Aira. Analyze context precisely.`;
 
         // 5. Chat with Ollama
         const ollamaMessages = [

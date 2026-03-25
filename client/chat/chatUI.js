@@ -157,7 +157,7 @@ function appendMessage(role, content) {
     
     const avatar = document.createElement('div');
     avatar.className = 'message-avatar';
-    avatar.innerHTML = role === 'user' ? 'P' : 'A'; // Pranav / AIra
+    avatar.innerHTML = role === 'user' ? 'P' : 'A'; // Pranav / Aira
 
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
