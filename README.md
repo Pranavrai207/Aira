@@ -1,18 +1,18 @@
-# AIra — Advanced Autonomous AI Agent System 🦾🤖
+# Aira — Advanced Autonomous AI Agent System 🦾🤖
 
-AIra is a premium, minimalist, and high-performance AI assistant built for the modern age. It leverages a multi-model agentic architecture to provide seamless text, vision, and document analysis — all while maintaining a state-of-the-art UI inspired by industry leaders like Claude and Gemini.
+Aira is a premium, minimalist, and high-performance AI assistant built for the modern age. It leverages a multi-model agentic architecture to provide seamless text, vision, and document analysis — all while maintaining a state-of-the-art UI inspired by industry leaders like Claude and Gemini.
 
 ---
 
 ## 🧠 Core System Architecture
 
-AIra is not just a chatbot; it's a sophisticated **Agentic System** that dynamically routes tasks based on complexity and modality.
+Aira is not just a chatbot; it's a sophisticated **Agentic System** that dynamically routes tasks based on complexity and modality.
 
 -   **Multi-Model Router**: Automatically switches between models based on task intent:
     -   ⚡ **Llama 3.2:1b**: Optimized for lightning-fast, simple conversational updates.
     -   🧠 **Gemma 3:4b**: The 'Heavy Reasoning' engine used for complex coding, analysis, and RAG.
     -   👁️ **Moondream:latest**: Dedicated vision engine for high-fidelity image analysis.
--   **Neural episodic Memory (RAG)**: Integrates **ChromaDB** for vector-based long-term memory, allowing AIra to "learn" from your uploaded documents and past interactions.
+-   **Neural episodic Memory (RAG)**: Integrates **ChromaDB** for vector-based long-term memory, allowing Aira to "learn" from your uploaded documents and past interactions.
 -   **Real-time Synchronization**: Powered by **Socket.io** for fluid, streaming responses and instantaneous state updates.
 
 ---
