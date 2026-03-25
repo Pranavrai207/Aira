@@ -1,12 +1,12 @@
 const socket = io();
 
 socket.on('connect', () => {
-    console.log('Connected to AIra server');
+    console.log('Connected to Aira server');
     updateStatus('Online');
 });
 
 socket.on('disconnect', () => {
-    console.log('Disconnected from AIra server');
+    console.log('Disconnected from Aira server');
     updateStatus('Offline');
 });
 

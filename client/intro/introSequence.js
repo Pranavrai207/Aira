@@ -9,7 +9,7 @@ const showStartScreen = () => {
     splash.id = 'splash-screen';
     splash.innerHTML = `
         <div class="splash-content">
-            <h1 class="logo">AIra</h1>
+            <h1 class="logo">Aira</h1>
             <p>Click to Initialize</p>
         </div>
     `;
