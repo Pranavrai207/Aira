@@ -28,6 +28,10 @@
             <nav id="sidebar-nav">
                 <button id="new-chat-btn" class="glass-btn">New Chat +</button>
                 
+                <div id="search-container">
+                    <input type="text" id="search-chats" placeholder="Search chats..." autocomplete="off">
+                </div>
+
                 <div class="sidebar-section">
                     <h3>Recent History</h3>
                     <div id="session-list">
@@ -70,6 +74,70 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="close-settings" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-group">
+                    <label>Theme</label>
+                    <select id="theme-select">
+                        <option value="light">Light</option>
+                        <option value="dark">Dark</option>
+                        <option value="cyberpunk">Cyberpunk</option>
+                    </select>
+                </div>
+                <div class="settings-group">
+                    <label>Preferred Model</label>
+                    <select id="model-select">
+                        <option value="auto">Auto-Select (Recommended)</option>
+                        <option value="llama3.2:1b">Llama 3.2 (Fast)</option>
+                        <option value="gemma2:2b">Gemma 2 (Conversational)</option>
+                        <option value="moondream:latest">Moondream (Vision)</option>
+                    </select>
+                </div>
+                <div class="settings-group">
+                    <label>Auto-Recall Memory</label>
+                    <input type="checkbox" id="auto-recall" checked>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-settings" class="glass-btn primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Memory Recap Modal -->
+    <div id="recap-modal" class="modal-overlay hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h2>Memory Recap</h2>
+                <button id="close-recap" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="recap-stats">
+                    <div class="stat-card">
+                        <span class="stat-label">Indexed Documents</span>
+                        <span id="recap-doc-count" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Total Sessions</span>
+                        <span id="recap-session-count" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="recap-section">
+                    <h3>Core Instincts</h3>
+                    <ul id="recap-instincts-list">
+                        <!-- Instincts loaded here -->
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Scripts -->

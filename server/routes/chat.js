@@ -88,28 +88,49 @@ router.post('/message', async (req, res) => {
         // 3. Recall Memory (RAG)
         const memoryResults = await vectorStore.query(text, 5);
         const relatedDocs = memoryResults.documents[0] || [];
+        const contextString = relatedDocs.length > 0 ? `\n\nContext from files:\n${relatedDocs.join('\n')}` : '';
 
-        // 4. Prepare System Prompt
+        // 4. Retrieve Full History
+        const session = await memory.getSession(sessionId);
+        let history = session ? session.messages : [];
+        
+        // Remove system messages from history to re-apply a fresh one
+        history = history.filter(m => m.role !== 'system');
+
+        // 5. Prepare System Prompt
         const chatInstincts = getInstincts().join('\n- ');
-        const systemPrompt = `You are Aira. Analyze context precisely.`;
+        const systemPrompt = `You are Aira, a premium AI assistant. Analyze context precisely.${contextString}\n\nInstincts:\n- ${chatInstincts}`;
 
-        // 5. Chat with Ollama
+        // 6. Build Message Array for Ollama
         const ollamaMessages = [
             { role: 'system', content: systemPrompt },
+            ...history,
             { role: 'user', content: text, images }
         ];
 
+        // 7. Chat with Ollama
         const response = await ollama.chat(model, ollamaMessages);
 
-        // 6. Cleanup image path if used
+        // 8. Cleanup image path if used
         if (isVisionTask) {
            await fs.remove(imagePath);
            delete memory.data.preferences[imagePathKey];
            await memory.save();
         }
 
-    // 5. Save to Episodic Memory (Session)
-    await memory.saveSession(sessionId, [...ollamaMessages, response.message]);
+    // 9. Save FULL History back to Episodic Memory
+    const finalHistory = [
+        ...history,
+        { role: 'user', content: text, images: images.length > 0 ? true : undefined },
+        response.message
+    ];
+    await memory.saveSession(sessionId, finalHistory);
+
+    // 10. Auto-title if first message
+    if (finalHistory.filter(m => m.role === 'user').length === 1) {
+        const titleSnippet = text.slice(0, 30) + (text.length > 30 ? '...' : '');
+        await memory.updateSessionTitle(sessionId, titleSnippet);
+    }
 
     res.json({
       role: 'assistant',
@@ -124,25 +145,47 @@ router.post('/message', async (req, res) => {
   }
 });
 
+router.get('/recap', async (req, res) => {
+    try {
+        await memory.init();
+        const docCount = await vectorStore.count();
+        const instincts = getInstincts();
+        const sessionCount = (await memory.getSessions()).length;
+        
+        res.json({
+            docCount,
+            instincts,
+            sessionCount,
+            lastKnowledgeUpdate: new Date().toISOString() // Placeholder for actual last update time
+        });
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to fetch memory recap' });
+    }
+});
+
 // --- Session History API ---
 router.get('/sessions', async (req, res) => {
+    await memory.init();
     const sessions = await memory.getSessions();
     res.json(sessions);
 });
 
 router.get('/sessions/:id', async (req, res) => {
+    await memory.init();
     const session = await memory.getSession(req.params.id);
     if (session) res.json(session);
     else res.status(404).send('Session not found');
 });
 
 router.patch('/sessions/:id', async (req, res) => {
+    await memory.init();
     const { title } = req.body;
     await memory.updateSessionTitle(req.params.id, title);
     res.status(200).send('Title updated');
 });
 
 router.delete('/sessions/:id', async (req, res) => {
+    await memory.init();
     await memory.deleteSession(req.params.id);
     res.status(200).send('Session deleted');
 });

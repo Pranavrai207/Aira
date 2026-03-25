@@ -52,6 +52,15 @@ class VectorStore {
       return { documents: [[]], metadatas: [[]] };
     }
   }
+  async count() {
+    if (!this.collection) await this.init();
+    try {
+      return await this.collection.count();
+    } catch (e) {
+      console.error('VectorStore count error:', e.message);
+      return 0;
+    }
+  }
 }
 
 module.exports = new VectorStore();

@@ -47,6 +47,10 @@ class EpisodicMemory {
     }));
   }
 
+  async getSession(sessionId) {
+    return this.data.sessions.find(s => s.id === sessionId);
+  }
+
   async deleteSession(sessionId) {
     this.data.sessions = this.data.sessions.filter(s => s.id !== sessionId);
     await this.save();
