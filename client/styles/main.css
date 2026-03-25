@@ -1,0 +1,243 @@
+:root {
+  --bg-main: #ffffff;
+  --bg-sidebar: #f9f9f9;
+  --sidebar-border: #e5e5e5;
+  --accent-primary: #10a37f; /* ChatGPT Green */
+  --accent-secondary: #0066cc; /* Claude Blue */
+  --accent-gemini: linear-gradient(90deg, #4285f4, #9b72cb, #d96570);
+  --text-main: #202123;
+  --text-muted: #666666;
+  --glass-blur: blur(5px);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Inter', 'Exo 2', sans-serif;
+  overflow: hidden;
+  height: 100vh;
+}
+
+#app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Sidebar Layout */
+#history-panel {
+  width: 260px;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  z-index: 10;
+}
+
+#history-panel button#new-chat-btn {
+  width: 100%;
+  padding: 10px;
+  background: white;
+  border: 1px solid var(--sidebar-border);
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+#history-panel button#new-chat-btn:hover {
+  background: #f0f0f0;
+}
+
+.sidebar-section {
+  margin-top: 25px;
+}
+
+.sidebar-section h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-tool-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s;
+}
+
+.sidebar-tool-btn:hover {
+  background: #f0f0f0;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  transition: background 0.2s;
+  color: var(--text-main);
+}
+
+.history-item:hover {
+  background: #f0f0f0;
+}
+
+.history-item.active {
+  background: #eef2ff;
+  font-weight: 500;
+}
+
+.history-actions {
+  display: none;
+  gap: 5px;
+}
+
+.history-item:hover .history-actions {
+  display: flex;
+}
+
+.history-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0.6;
+}
+
+.history-btn:hover {
+  opacity: 1;
+}
+
+.user-badge::before {
+  content: 'P';
+  width: 24px;
+  height: 24px;
+  background: #cecece;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+}
+
+/* Main Chat Area */
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: white;
+}
+
+header {
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 1.4rem;
+  background: var(--accent-gemini);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Status & Tools Panel (Now Hidden or Overlay) */
+#status-panel {
+  display: none; /* Make it an optional widget later */
+}
+
+/* Layout Utilities */
+.hidden {
+  display: none !important;
+}
+
+#splash-screen {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  cursor: pointer;
+  color: white;
+  text-align: center;
+}
+
+.splash-content p {
+  font-family: 'Orbitron', sans-serif;
+  margin-top: 10px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+#intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#intro-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

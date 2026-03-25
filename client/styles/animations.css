@@ -1,0 +1,44 @@
+@keyframes glow {
+  0% { box-shadow: 0 0 5px var(--accent-cyan); }
+  50% { box-shadow: 0 0 20px var(--accent-cyan); }
+  100% { box-shadow: 0 0 5px var(--accent-cyan); }
+}
+
+.glow-btn {
+  animation: glow 2s infinite;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.status-item {
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}
+
+.status-item label {
+  color: var(--accent-cyan);
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+#status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #00f5ff;
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 5px #00f5ff;
+}

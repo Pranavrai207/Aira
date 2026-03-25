@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIra — Minimal AI Agent</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/chat.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+</head>
+<body>
+    <!-- Intro Overlay -->
+    <div id="intro-overlay">
+        <video id="intro-video" playsinline>
+            <source src="assets/intro.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <!-- Main App UI -->
+    <div id="app-container" class="hidden">
+        <aside id="history-panel">
+            <header style="border:none; padding: 0; margin-bottom: 20px; height: auto;">
+                <div class="logo">AIra</div>
+            </header>
+            
+            <nav id="sidebar-nav">
+                <button id="new-chat-btn" class="glass-btn">New Chat +</button>
+                
+                <div class="sidebar-section">
+                    <h3>Recent History</h3>
+                    <div id="session-list">
+                        <!-- History items -->
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Tools & Settings</h3>
+                    <button class="sidebar-tool-btn" id="settings-btn">⚙️ Settings</button>
+                    <button class="sidebar-tool-btn" id="recall-btn">🧠 Memory Recap</button>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-badge">Pranav</div>
+            </div>
+        </aside>
+
+        <main>
+            <header id="main-header">
+                <div class="agent-model-status">
+                    <span id="current-tool">AIra Agent — v1.0</span>
+                </div>
+            </header>
+
+            <section id="chat-panel">
+                <div id="chat-messages">
+                    <!-- Messages appear here -->
+                </div>
+                
+                <div id="input-container">
+                    <button id="attach-btn" class="action-btn">📎</button>
+                    <input type="file" id="file-input" style="display:none;" multiple>
+                    <input type="text" id="user-input" placeholder="Message AIra..." autocomplete="off">
+                    <div class="prompt-actions">
+                        <button id="mic-btn" class="action-btn">🎤</button>
+                        <button id="send-btn">Send</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="chat/socketClient.js"></script>
+    <script src="chat/chatUI.js"></script>
+    <script src="intro/introSequence.js"></script>
+</body>
+</html>
