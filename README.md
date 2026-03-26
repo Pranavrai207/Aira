@@ -1,90 +1,65 @@
-# Aira — Advanced Autonomous AI Agent System 🦾🤖
+# Aira — The Elite Hybrid AI Assistant
 
-Aira is a premium, minimalist, and high-performance AI assistant built for the modern age. It leverages a multi-model agentic architecture to provide seamless text, vision, and document analysis — all while maintaining a state-of-the-art UI inspired by industry leaders like Claude and Gemini.
+**Aira** is a premium, "Cloud-First" hybrid AI assistant designed for high-performance reasoning and a cinematic user experience. Built with a robust failover architecture, it seamlessly transitions between massive cloud models and local privacy-focused instances.
 
----
+![Aira UI](assets/logo.png) <!-- Ensure logo exists or just use text -->
 
-## 🧠 Core System Architecture
+## 🚀 Key Features
 
-Aira is not just a chatbot; it's a sophisticated **Agentic System** that dynamically routes tasks based on complexity and modality.
+### 1. **Hybrid Cloud-First Architecture**
+- **Ollama Cloud Primary**: Leverages extreme-scale models like **Cogito 2.1 671B** and **Gemma 3 12B** via `https://ollama.com`.
+- **Intelligent Local Fallback**: Automatically redirects requests to a local Ollama instance (`localhost:11434`) if the cloud is unreachable.
+- **Failover Mapping**: Dynamically maps complex cloud tasks to the best available local models (e.g., `gemma3:4b`).
 
--   **Multi-Model Router**: Automatically switches between models based on task intent:
-    -   ⚡ **Llama 3.2:1b**: Optimized for lightning-fast, simple conversational updates.
-    -   🧠 **Gemma 3:4b**: The 'Heavy Reasoning' engine used for complex coding, analysis, and RAG.
-    -   👁️ **Moondream:latest**: Dedicated vision engine for high-fidelity image analysis.
--   **Neural episodic Memory (RAG)**: Integrates **ChromaDB** for vector-based long-term memory, allowing Aira to "learn" from your uploaded documents and past interactions.
--   **Real-time Synchronization**: Powered by **Socket.io** for fluid, streaming responses and instantaneous state updates.
+### 2. **Cinematic User Experience**
+- **Buttery Smooth Streaming**: Uses a high-performance **Buffered Renderer** (15fps) to eliminate markdown flickering and layout jumps.
+- **Top-Notch Formatting**: Elite typography using the `Outfit` font, large hierarchical headings (H1-H3), and generous semantic spacing.
+- **Glassmorphism UI**: High-end visual effects including backdrop blurs, glide-in animations, and a dynamic typing cursor.
+- **Integrated Utilities**: Direct "Copy Code" buttons on all snippets and a persistent Memory Recap (RAG) system.
 
----
-
-## ✨ Key Features
-
-### 🎨 Minimalist & Premium UI
-- **Unified Sidebar**: Full session history management (View, Rename, Delete) with persistent "Recent History" and "Tools & Settings" sections.
-- **Fluid Layout**: Scrollable chat history with a fixed, glowing prompt area and bottom-positioned user badges.
-- **Cinematic Experience**: A GSAP-powered "Click to Initialize" splash screen ensures browser-compliant audio playback and a professional reveal.
-
-### 📎 Advanced File & Document Intel
-- **Universal Attachment**: Support for **PDF, Word (.docx), and Text** file processing.
-- **Local RAG Integration**: Uploaded documents are instantly indexed into the local vector store for context-aware Q&A.
-- **Vision Pro**: Real-time image previews in the chat UI with contextual analysis via a dedicated vision model.
-
-### 🎤 Voice & Multimodal Interaction
-- **Speech-to-Text**: Native Web Speech API integration for hands-free interaction.
-- **Automatic History tracking**: Every session is unique and persisted, allowing for multi-threaded workflows.
+### 3. **Memory & Context**
+- **RAG-Ready**: Integrated document parsing (PDF/Images) with vector search capabilities.
+- **Conversational Recall**: Persistent session history with a clean, searchable sidebar.
 
 ---
 
-## 🛠️ Tech Stack
-
--   **Frontend**: Vanilla HTML5/CSS3, JavaScript (ES6+), GSAP (Animations), Marked.js (Markdown), Highlight.js (Syntax Highlighting).
--   **Backend**: Node.js, Express.js (REST/Static), Socket.io (Real-time).
--   **Storage**: ChromaDB (Vector Search), Episodic Memory (JSON-based persistence).
--   **LLM Runtime**: Ollama (Running local LLMs for privacy and zero latency).
--   **Deployment**: Optimized for Vercel/Self-hosted.
-
----
-
-## 🚀 Getting Started
+## 🛠️ Setup & Installation
 
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v18+)
-- [Ollama](https://ollama.com/) (Required for Local LLMs)
-- Models required: `llama3.2:1b`, `gemma3:4b`, `moondream:latest`
+- Node.js (v18+)
+- [Ollama](https://ollama.com) (Both Cloud account and Local instance installed)
+
+### Environment Configuration
+Create a `.env` file in the root directory:
+```env
+# Ollama Cloud Configuration
+OLLAMA_BASE_URL=https://ollama.com
+OLLAMA_API_KEY=your_cloud_api_key_here
+
+# Local Fallback Configuration
+LOCAL_OLLAMA_URL=http://localhost:11434
+
+# Server Config
+PORT=3001
+```
 
 ### Installation
-1.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/Pranavrai207/Aira.git
-    cd Aira
-    ```
-2.  **Install Dependencies**:
-    ```bash
-    npm install --legacy-peer-deps
-    ```
-3.  **Environment Setup**: Create a `.env` file in the root directory:
-    ```env
-    PORT=3001
-    OLLAMA_BASE_URL=http://localhost:11434
-    DATA_DIR=./data
-    ```
-
-### Running the Application
 ```bash
+npm install
 npm run dev
 ```
 
 ---
 
-## 📅 Roadmap & Future Enhancements
-- [ ] **Cloud Persistence**: Migration to PostgreSQL for enterprise-grade history tracking.
-- [ ] **Internet Access**: Integrated browsing tool for real-time data retrieval.
-- [ ] **Voice Synthesis (TTS)**: Adding high-quality character voice responses.
+## 🧬 Tech Stack
+- **Frontend**: Vanilla JS, CSS (Glassmorphism), GSAP (Animations), Marked.js (Markdown), Highlight.js (Code).
+- **Backend**: Node.js, Express, Socket.io (Real-time Streaming).
+- **AI Engines**: Ollama (Cloud & Local).
 
 ---
 
-## 👨‍💻 Author
-**Pranav** — Senior Systems Architect & UI Lead.
+## 🤝 Contributing
+Built with ❤️ by Pranav. Designed for the future of agentic AI. 
 
 ---
-*Built with ❤️ for a minimalist future.*
+*Verified: Stable, Hybrid, and Cinematic.*
