@@ -13,16 +13,16 @@ function selectModel(task) {
 
   // Complex coding/reasoning
   if (task.type === 'code' || task.type === 'complex' || (task.complexity && task.complexity > 0.7)) {
-    return hasKey ? 'gpt-oss:120b' : 'gemma:2b';
+    return hasKey ? 'cogito-2.1:671b' : 'gemma3:4b';
   }
 
   // Quick chat, simple Q&A, formatting
   if (task.type === 'quick' || task.type === 'simple') {
-    return hasKey ? 'llama3.1:8b' : 'llama3.2:1b';
+    return hasKey ? 'gemma3:12b' : 'llama3.2:1b';
   }
 
   // Default
-  return hasKey ? 'llama3.1:8b' : 'llama3.2:1b';
+  return hasKey ? 'gemma3:12b' : 'llama3.2:1b';
 }
 
 module.exports = { selectModel };

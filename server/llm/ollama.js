@@ -16,7 +16,9 @@ class OllamaClient {
       return await this._request('generate', { model, prompt, stream: false, ...options });
     } catch (error) {
       console.warn(`Primary host failed, trying fallback: ${error.message}`);
-      return await this._request('generate', { model, prompt, stream: false, ...options }, true);
+      // Fallback model mapping
+      const localModel = model.includes('671b') ? 'gemma3:4b' : 'llama3.2:1b';
+      return await this._request('generate', { model: localModel, prompt, stream: false, ...options }, true);
     }
   }
 
@@ -28,7 +30,9 @@ class OllamaClient {
       else return result;
     } catch (error) {
       console.warn(`Cloud chat failed, falling back to local: ${error.message}`);
-      const result = await this._chatRequest(model, messages, options, true);
+      // Map to a reliable local model for fallback
+      const localModel = (model.includes('671b') || model.includes('12b')) ? 'gemma3:4b' : 'llama3.2:1b';
+      const result = await this._chatRequest(localModel, messages, options, true);
       if (stream) yield* result;
       else return result;
     }
@@ -80,7 +84,7 @@ class OllamaClient {
 
   async embed(model, input) {
     try {
-      const response = await axios.post(`${this.baseUrl}/api/embeddings`, {
+      const response = await axios.post(`${this.primaryHost}/api/embeddings`, {
         model,
         prompt: input
       });
@@ -93,7 +97,7 @@ class OllamaClient {
 
   async listModels() {
     try {
-      const response = await axios.get(`${this.baseUrl}/api/tags`);
+      const response = await axios.get(`${this.primaryHost}/api/tags`);
       return response.data;
     } catch (error) {
       console.error('Ollama list error:', error.message);
