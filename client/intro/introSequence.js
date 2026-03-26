@@ -52,56 +52,42 @@ if (introVideo.readyState >= 2) {
 introVideo.addEventListener('ended', finishIntro);
 
 function finishIntro() {
-    introVideo.pause(); // Ensure sound stops immediately
-    gsap.to(introOverlay, {
-        opacity: 0,
-        duration: 1.2,
-        ease: "power2.inOut",
-        onComplete: () => {
-            introOverlay.style.display = 'none';
-            revealApp();
-        }
-    });
+    introVideo.pause();
+    
+    // Add fade-out and slide-up effect to the overlay
+    introOverlay.classList.add('intro-fade-out');
+    
+    // Trigger the app reveal with the scroll-up animation
+    setTimeout(() => {
+        introOverlay.style.display = 'none';
+        revealApp();
+    }, 800);
 }
 
 function revealApp() {
     appContainer.classList.remove('hidden');
+    appContainer.classList.add('scroll-up');
     
-    // Animate panels with a cinematic staggered reveal
     const tl = gsap.timeline();
     
-    tl.from(appContainer, {
-        backgroundColor: "rgba(0,0,0,1)",
-        duration: 2
+    // Stagger the appearance of inner elements to match the scroll
+    tl.from('#history-panel', {
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+        delay: 0.2,
+        ease: "power4.out"
     })
-    .from('.logo', {
-        y: -20,
-        opacity: 0,
-        duration: 1,
-        ease: "back.out(1.7)"
-    }, "-=1")
-    .from('#history-panel', {
-        x: -50,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out"
-    }, "-=0.5")
-    .from('#status-panel', {
-        x: 50,
-        opacity: 0,
-        duration: 0.8,
-        ease: "power3.out"
-    }, "-=0.8")
     .from('#chat-panel', {
-        scale: 0.9,
+        y: 150,
+        opacity: 0,
+        duration: 1.4,
+        ease: "power4.out"
+    }, "-=1")
+    .from('#input-container', {
+        y: 80,
         opacity: 0,
         duration: 1,
-        ease: "power2.out"
-    }, "-=0.5")
-    .from('#input-container', {
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        ease: "power2.out"
-    }, "-=0.4");
+        ease: "power3.out"
+    }, "-=1.2");
 }

@@ -42,3 +42,26 @@
   margin-right: 8px;
   box-shadow: 0 0 5px #00f5ff;
 }
+/* Cinematic Scroll-up Animation */
+#app-container.scroll-up {
+  animation: fullScrollUp 1.6s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 -20px 50px rgba(0,0,0,0.5);
+}
+
+@keyframes fullScrollUp {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(0); }
+}
+
+@keyframes contentSlideUp {
+  from { transform: translateY(100px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.intro-fade-out {
+  animation: fadeOutScroll 1s forwards;
+}
+
+@keyframes fadeOutScroll {
+  to { transform: translateY(-30px); opacity: 0; }
+}
