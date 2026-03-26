@@ -53,9 +53,6 @@
 
         <main>
             <header id="main-header">
-                <div class="agent-model-status">
-                    <span id="current-tool">Aira Agent — v1.0</span>
-                </div>
             </header>
 
             <section id="chat-panel">
@@ -73,44 +70,62 @@
                     </div>
                 </div>
             </section>
+
+            <section id="settings-view" class="hidden">
+                <div class="settings-view-header">
+                    <button id="close-settings-view" class="back-btn">← Back to Chat</button>
+                    <h1>Settings</h1>
+                </div>
+                <div class="settings-view-content">
+                    <div class="settings-card">
+                        <h2>Personalization</h2>
+                        <div class="settings-group">
+                            <label>System Prompt Override</label>
+                            <p class="settings-desc">Override Aira's core personality and instructions.</p>
+                            <textarea id="system-prompt" placeholder="e.g. You are a helpful coding assistant..." rows="5"></textarea>
+                        </div>
+                        <div class="settings-group">
+                            <label>Custom Instructions</label>
+                            <p class="settings-desc">Provide your personal context or specific style preferences.</p>
+                            <textarea id="custom-instructions" placeholder="e.g. My name is Pranav and I like Python..." rows="5"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <h2>Appearance & Logic</h2>
+                        <div class="settings-grid">
+                            <div class="settings-group">
+                                <label>Theme</label>
+                                <select id="theme-select">
+                                    <option value="light">Light</option>
+                                    <option value="dark">Dark</option>
+                                    <option value="cyberpunk">Cyberpunk</option>
+                                </select>
+                            </div>
+                            <div class="settings-group">
+                                <label>Preferred Model</label>
+                                <select id="model-select">
+                                    <option value="auto">Auto-Select (Recommended)</option>
+                                    <option value="llama3.2:1b">Llama 3.2:1b (Fast)</option>
+                                    <option value="gemma3:4b">Gemma 3:4b (Heavy Reasoning)</option>
+                                    <option value="moondream:latest">Moondream (Vision)</option>
+                                </select>
+                            </div>
+                            <div class="settings-group checkbox-group">
+                                <label>Auto-Recall Memory</label>
+                                <input type="checkbox" id="auto-recall" checked>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-footer">
+                        <button id="save-settings-view" class="glass-btn primary large">Save All Changes</button>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
 
-    <!-- Settings Modal -->
-    <div id="settings-modal" class="modal-overlay hidden">
-        <div class="modal-content glass">
-            <div class="modal-header">
-                <h2>Settings</h2>
-                <button id="close-settings" class="close-btn">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="settings-group">
-                    <label>Theme</label>
-                    <select id="theme-select">
-                        <option value="light">Light</option>
-                        <option value="dark">Dark</option>
-                        <option value="cyberpunk">Cyberpunk</option>
-                    </select>
-                </div>
-                <div class="settings-group">
-                    <label>Preferred Model</label>
-                    <select id="model-select">
-                        <option value="auto">Auto-Select (Recommended)</option>
-                        <option value="llama3.2:1b">Llama 3.2 (Fast)</option>
-                        <option value="gemma2:2b">Gemma 2 (Conversational)</option>
-                        <option value="moondream:latest">Moondream (Vision)</option>
-                    </select>
-                </div>
-                <div class="settings-group">
-                    <label>Auto-Recall Memory</label>
-                    <input type="checkbox" id="auto-recall" checked>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button id="save-settings" class="glass-btn primary">Save Changes</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Memory Recap Modal -->
     <div id="recap-modal" class="modal-overlay hidden">

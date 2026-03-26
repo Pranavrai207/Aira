@@ -84,7 +84,7 @@
   padding: 10px 15px;
   border: 1px solid var(--sidebar-border);
   border-radius: 12px;
-  background: var(--bg-main);
+  background: var(--bg-gradient-soft);
   display: flex;
   align-items: center;
   gap: 10px;

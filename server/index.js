@@ -42,8 +42,20 @@ const chatRouter = require('./routes/chat');
 app.use('/api/chat', chatRouter);
 
 // Socket.io Connection
+const orchestrator = require('./agents/orchestrator');
+
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);
+
+  socket.on('chat:message', async (data) => {
+    const { text, sessionId, model, systemPrompt, customInstructions } = data;
+    try {
+      await orchestrator.handleTask(text, sessionId, socket, model || 'auto', systemPrompt, customInstructions);
+    } catch (err) {
+      console.error('Socket chat error:', err);
+      socket.emit('chat:error', { error: 'Internal server error' });
+    }
+  });
 
   socket.on('disconnect', () => {
     console.log('Client disconnected:', socket.id);

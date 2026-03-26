@@ -6,9 +6,10 @@ const newChatBtn = document.getElementById('new-chat-btn');
 const sessionList = document.getElementById('session-list');
 const searchInput = document.getElementById('search-chats');
 const settingsBtn = document.getElementById('settings-btn');
-const settingsModal = document.getElementById('settings-modal');
-const closeSettingsBtn = document.getElementById('close-settings');
-const saveSettingsBtn = document.getElementById('save-settings');
+const settingsView = document.getElementById('settings-view');
+const chatPanel = document.getElementById('chat-panel');
+const closeSettingsViewBtn = document.getElementById('close-settings-view');
+const saveSettingsViewBtn = document.getElementById('save-settings-view');
 
 let currentSessionId = 'session-' + Date.now();
 let allSessions = [];
@@ -26,29 +27,48 @@ searchInput.addEventListener('input', (e) => {
 const savedModel = localStorage.getItem('aira-model') || 'auto';
 const savedTheme = localStorage.getItem('aira-theme') || 'light';
 const savedRecall = localStorage.getItem('aira-recall') !== 'false';
+const savedSystemPrompt = localStorage.getItem('aira-system-prompt') || '';
+const savedCustomInstructions = localStorage.getItem('aira-custom-instructions') || '';
 
 document.getElementById('model-select').value = savedModel;
 document.getElementById('theme-select').value = savedTheme;
 document.getElementById('auto-recall').checked = savedRecall;
+document.getElementById('system-prompt').value = savedSystemPrompt;
+document.getElementById('custom-instructions').value = savedCustomInstructions;
 document.body.className = `theme-${savedTheme}`;
 
-settingsBtn.addEventListener('click', () => settingsModal.classList.remove('hidden'));
-closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
+settingsBtn.addEventListener('click', () => {
+    chatPanel.classList.add('hidden');
+    settingsView.classList.remove('hidden');
+});
 
-saveSettingsBtn.addEventListener('click', () => {
+closeSettingsViewBtn.addEventListener('click', () => {
+    settingsView.classList.add('hidden');
+    chatPanel.classList.remove('hidden');
+});
+
+saveSettingsViewBtn.addEventListener('click', () => {
     const model = document.getElementById('model-select').value;
     const theme = document.getElementById('theme-select').value;
     const recall = document.getElementById('auto-recall').checked;
+    const systemPrompt = document.getElementById('system-prompt').value;
+    const customInstructions = document.getElementById('custom-instructions').value;
 
     localStorage.setItem('aira-model', model);
     localStorage.setItem('aira-theme', theme);
     localStorage.setItem('aira-recall', recall);
+    localStorage.setItem('aira-system-prompt', systemPrompt);
+    localStorage.setItem('aira-custom-instructions', customInstructions);
 
-    // Apply theme (basic implementation)
+    // Apply theme
     document.body.className = `theme-${theme}`;
     
-    alert("Settings saved!");
-    settingsModal.classList.add('hidden');
+    // Switch back to chat
+    settingsView.classList.add('hidden');
+    chatPanel.classList.remove('hidden');
+    
+    // Optional feedback
+    console.log("Settings saved!");
 });
 
 const recallBtn = document.getElementById('recall-btn');
@@ -224,18 +244,62 @@ async function sendMessage() {
     appendMessage('user', text);
     userInput.value = '';
 
-    try {
-        const response = await fetch('/api/chat/message', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, sessionId: currentSessionId })
-        });
-        const data = await response.json();
-        appendMessage('aira', data.content);
-        loadSessions();
-    } catch (error) {
-        appendMessage('aira', 'An error occurred. Check the server.');
+    // Choose model from settings
+    const model = localStorage.getItem('aira-model') || 'auto';
+
+    // Show initial thinking state
+    updateCurrentTool('Aira: Processing...');
+
+    // Transmit custom instructions if present
+    const systemPrompt = localStorage.getItem('aira-system-prompt') || '';
+    const customInstructions = localStorage.getItem('aira-custom-instructions') || '';
+
+    // Emit message via Socket
+    socket.emit('chat:message', { 
+        text, 
+        sessionId: currentSessionId,
+        model: model,
+        systemPrompt: systemPrompt,
+        customInstructions: customInstructions
+    });
+}
+
+// Add these listeners for Socket interaction
+socket.on('chat:token', ({ token }) => {
+    appendToLastMessage(token);
+    updateCurrentTool('Aira: Thinking...'); // Reset status if we were showing a specific tool
+});
+
+socket.on('chat:done', ({ fullText }) => {
+    updateCurrentTool('Aira: Ready');
+    loadSessions(); // Update titles/history
+});
+
+socket.on('agent:thinking', ({ step }) => {
+    updateCurrentTool(step);
+});
+
+socket.on('chat:error', ({ error }) => {
+    appendMessage('aira', `⚠️ Error: ${error}`);
+    updateCurrentTool('Aira: Error');
+});
+
+function appendToLastMessage(token) {
+    let lastMsg = chatMessages.lastElementChild;
+    if (!lastMsg || !lastMsg.classList.contains('aira')) {
+        appendMessage('aira', '');
+        lastMsg = chatMessages.lastElementChild;
     }
+    const contentDiv = lastMsg.querySelector('.message-content');
+    
+    // We store raw response in a data attribute to re-parse with marked
+    const currentRaw = lastMsg.getAttribute('data-raw') || '';
+    const newRaw = currentRaw + token;
+    lastMsg.setAttribute('data-raw', newRaw);
+    
+    contentDiv.innerHTML = marked.parse(newRaw);
+    contentDiv.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+    chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 function appendMessage(role, content) {
@@ -250,6 +314,7 @@ function appendMessage(role, content) {
     contentDiv.className = 'message-content';
     
     if (role === 'aira' || role === 'assistant') {
+        msgDiv.setAttribute('data-raw', content);
         contentDiv.innerHTML = marked.parse(content);
         contentDiv.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
     } else {

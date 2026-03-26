@@ -20,23 +20,29 @@ class OllamaClient {
     }
   }
 
-  async chat(model, messages, stream = false, options = {}) {
+  async *chat(model, messages, options = {}) {
+    const { stream = false, ...otherOptions } = options;
     try {
+      const response = await axios.post(`${this.baseUrl}/api/chat`, {
+        model,
+        messages,
+        stream,
+        ...otherOptions
+      }, { responseType: stream ? 'stream' : 'json' });
+
       if (stream) {
-        const response = await axios.post(`${this.baseUrl}/api/chat`, {
-          model,
-          messages,
-          stream: true,
-          ...options
-        }, { responseType: 'stream' });
-        return response.data;
+        for await (const chunk of response.data) {
+          const lines = chunk.toString().split('\n');
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+              yield JSON.parse(line);
+            } catch (e) {
+              console.warn("Failed to parse Ollama chunk:", line);
+            }
+          }
+        }
       } else {
-        const response = await axios.post(`${this.baseUrl}/api/chat`, {
-          model,
-          messages,
-          stream: false,
-          ...options
-        });
         return response.data;
       }
     } catch (error) {

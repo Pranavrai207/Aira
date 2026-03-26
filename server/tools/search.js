@@ -1,27 +1,33 @@
-let search;
-try {
-  search = require('duckduckgo-search').search;
-} catch (e) {
-  console.warn('duckduckgo-search package not found. Web search will be disabled.');
-}
+const { chromium } = require('playwright');
 
 async function webSearch(query) {
-  if (!search) {
-    return [{ title: 'Search Disabled', snippet: 'Please install a search package to enable this feature.', url: '#' }];
-  }
+  let browser;
   try {
-    const results = await search(query, {
-      safeSearch: 1, 
-      time: 'y', 
+    browser = await chromium.launch({ headless: true });
+    const page = await browser.newPage();
+    const searchUrl = `https://duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+    
+    await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    
+    // Extract results using simple DOM selection
+    const results = await page.$$eval('.result', items => {
+      return items.slice(0, 5).map(item => {
+        const titleEl = item.querySelector('.result__title a');
+        const snippetEl = item.querySelector('.result__snippet');
+        return {
+          title: titleEl ? titleEl.innerText : '',
+          url: titleEl ? titleEl.href : '',
+          snippet: snippetEl ? snippetEl.innerText : ''
+        }
+      });
     });
-    return results.slice(0, 5).map(r => ({
-      title: r.title,
-      snippet: r.description,
-      url: r.url
-    }));
+
+    return results;
   } catch (error) {
     console.error('Search error:', error.message);
     return [];
+  } finally {
+    if (browser) await browser.close();
   }
 }
 

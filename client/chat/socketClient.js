@@ -10,20 +10,8 @@ socket.on('disconnect', () => {
     updateStatus('Offline');
 });
 
-socket.on('chat:token', ({ token }) => {
-    appendToLastMessage(token);
-});
-
 socket.on('chat:done', ({ fullText }) => {
     console.log('Message complete');
-});
-
-socket.on('agent:thinking', ({ step }) => {
-    updateCurrentTool(step);
-});
-
-socket.on('tool:result', ({ tool, result }) => {
-    console.log(`Tool ${tool} finished:`, result);
 });
 
 function updateStatus(status) {
@@ -39,5 +27,11 @@ function updateStatus(status) {
 }
 
 function updateCurrentTool(toolName) {
-    document.getElementById('current-tool').innerText = toolName;
+    const toolEl = document.getElementById('current-tool');
+    toolEl.innerText = toolName;
+    if (toolName.includes('...') || toolName.includes('Working')) {
+        toolEl.classList.add('thinking-glow');
+    } else {
+        toolEl.classList.remove('thinking-glow');
+    }
 }

@@ -11,7 +11,8 @@ Return the plan as a JSON array of objects: [{ "step": 1, "tool": "tool_name", "
 
   try {
     const response = await ollama.generate('llama3.2:1b', prompt, { format: 'json' });
-    return JSON.parse(response.response);
+    const parsed = JSON.parse(response.response);
+    return Array.isArray(parsed) ? parsed : (parsed.plan || [parsed]);
   } catch (error) {
     console.error('Project planning error:', error.message);
     return [{ step: 1, tool: 'chat', args: taskDescription, reason: 'Fallback to direct chat' }];

@@ -25,6 +25,7 @@ class VectorStore {
 
   async addDocument(id, text, metadata = {}) {
     if (!this.collection) await this.init();
+    if (!this.collection) return; // Silent skip if still null
     try {
       const embedding = await ollama.embed('nomic-embed-text:latest', text);
       await this.collection.add({
@@ -40,6 +41,7 @@ class VectorStore {
 
   async query(text, nResults = 5) {
     if (!this.collection) await this.init();
+    if (!this.collection) return { documents: [[]], metadatas: [[]] };
     try {
       const embedding = await ollama.embed('nomic-embed-text:latest', text);
       const results = await this.collection.query({
@@ -54,6 +56,7 @@ class VectorStore {
   }
   async count() {
     if (!this.collection) await this.init();
+    if (!this.collection) return 0;
     try {
       return await this.collection.count();
     } catch (e) {
