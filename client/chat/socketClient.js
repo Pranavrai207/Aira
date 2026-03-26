@@ -17,6 +17,8 @@ socket.on('chat:done', ({ fullText }) => {
 function updateStatus(status) {
     const dot = document.getElementById('status-dot');
     const text = document.getElementById('status-text');
+    if (!dot || !text) return;
+
     if (status === 'Online') {
         dot.style.background = '#00f5ff';
         text.innerText = 'System Online';
@@ -28,6 +30,8 @@ function updateStatus(status) {
 
 function updateCurrentTool(toolName) {
     const toolEl = document.getElementById('current-tool');
+    if (!toolEl) return;
+    
     toolEl.innerText = toolName;
     if (toolName.includes('...') || toolName.includes('Working')) {
         toolEl.classList.add('thinking-glow');
